@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42perpignan.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 16:58:36 by pmenard           #+#    #+#             */
-/*   Updated: 2025/02/12 16:58:42 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/02/12 17:46:29 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,42 +15,48 @@
 void	*increment_counter(void *arg)
 {
 	t_philo	*philo;
-	int		i;
 
 	philo = (t_philo *) arg;
-	i = 0;
-	while (i < 1000)
+	printf("forks : %d\n", philo->forks);
+	if (philo->forks > 1)
 	{
-		pthread_mutex_lock(&philo->mutex);
-		++philo->counter;
-		pthread_mutex_unlock(&philo->mutex);
-		i++;
+		pthread_mutex_lock(philo->mutex);
+		philo->forks -= 2;
+		pthread_mutex_unlock(philo->mutex);
+		printf("philo %d took 2 forks to eat\n", philo->id);
 	}
-	printf("thread termine\n");
 	return (NULL);
 }
 
 int	main(void)
 {
-	t_philo		philo;
-	int			nb_philos;
-	int			i;
+	pthread_t		*threads;
+	t_philo			*philo;
+	pthread_mutex_t	mutex;
+	int				nb_philos;
+	int				i;
 
-	nb_philos = 5;
-	philo.thread = malloc(nb_philos * sizeof(pthread_t));
-	philo.counter = 0;
-	if (pthread_mutex_init(&philo.mutex, NULL) != 0)
+	nb_philos = 8;
+	threads = malloc(nb_philos * sizeof(pthread_t));
+	philo = malloc(nb_philos * sizeof(t_philo));
+	philo->forks = nb_philos;
+	printf("Valeur initiale de forks : %d\n", philo->forks);
+	if (pthread_mutex_init(&mutex, NULL) != 0)
 	{
-		fprintf(stderr, "Erreur lors de l'initialisation du mutex.\n");
+		printf("Erreur lors de l'initialisation du mutex.\n");
 		return (1);
 	}
 	i = 0;
 	while (i < nb_philos)
 	{
-		if (pthread_create(&philo.thread[i], NULL, increment_counter, &philo))
+		philo[i].id = i + 1;
+		philo[i].mutex = &mutex;
+		if (i > 0)
+			philo[i].forks = philo[i - 1].forks;
+		if (pthread_create(&threads[i], NULL, increment_counter, &philo[i]))
 		{
 			printf("Erreur lors de la creation du thread\n");
-			pthread_mutex_destroy(&philo.mutex);
+			pthread_mutex_destroy(&mutex);
 			return (1);
 		}
 		i++;
@@ -58,15 +64,15 @@ int	main(void)
 	i = 0;
 	while (i < nb_philos)
 	{
-		if (pthread_join(philo.thread[i], NULL))
+		if (pthread_join(threads[i], NULL))
 		{
 			printf("Erreur lors de l'attente' du thread\n");
-			pthread_mutex_destroy(&philo.mutex);
+			pthread_mutex_destroy(&mutex);
 			return (2);
 		}
 		i++;
 	}
-	printf("Valeur finale du compteur : %d\n", philo.counter);
-	pthread_mutex_destroy(&philo.mutex);
+	printf("Valeur finale de forks : %d\n", philo->forks);
+	pthread_mutex_destroy(&mutex);
 	return (0);
 }
