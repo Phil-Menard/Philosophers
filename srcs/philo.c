@@ -5,51 +5,68 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: pmenard <pmenard@student.42perpignan.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/12 12:01:01 by pmenard           #+#    #+#             */
-/*   Updated: 2025/02/12 13:34:16 by pmenard          ###   ########.fr       */
+/*   Created: 2025/02/12 16:58:36 by pmenard           #+#    #+#             */
+/*   Updated: 2025/02/12 16:58:42 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void *thread_function(void *arg)
+void	*increment_counter(void *arg)
 {
-	int value = *(int *)arg;
-	printf("Bonjour depuis le thread ! Valeur reçue : %d\n", value);
-	pthread_exit(NULL); // Termine le thread
-}
+	t_philo	*philo;
+	int		i;
 
-pthread_t	*create_philo(int nb_philo)
-{
-	pthread_t	*philos;
-	int			i;
-	int			*arg;
-
-	philos = malloc(nb_philo * sizeof(pthread_t));
-	arg = malloc(nb_philo * sizeof(int));
+	philo = (t_philo *) arg;
 	i = 0;
-	while (i < nb_philo)
+	while (i < 1000)
 	{
-		arg[i] = i * 10;
-		if (pthread_create(&philos[i], NULL, thread_function, (void *)&arg[i]) != 0)
-			printf("Erreur lors de la création du thread\n");
+		pthread_mutex_lock(&philo->mutex);
+		++philo->counter;
+		pthread_mutex_unlock(&philo->mutex);
 		i++;
 	}
-	return (philos);
+	printf("thread termine\n");
+	return (NULL);
 }
 
 int	main(void)
 {
-	pthread_t	*thread;
-	int			nb_philo;
+	t_philo		philo;
+	int			nb_philos;
+	int			i;
 
-	nb_philo = 3;
-	thread = create_philo(nb_philo);
-	pthread_join(thread[0], NULL);
-	printf("Le thread1 s'est termine\n");
-	pthread_join(thread[1], NULL);
-	printf("Le thread2 s'est termine\n");
-	pthread_join(thread[2], NULL);
-	printf("Le thread3 s'est termine\n");
+	nb_philos = 5;
+	philo.thread = malloc(nb_philos * sizeof(pthread_t));
+	philo.counter = 0;
+	if (pthread_mutex_init(&philo.mutex, NULL) != 0)
+	{
+		fprintf(stderr, "Erreur lors de l'initialisation du mutex.\n");
+		return (1);
+	}
+	i = 0;
+	while (i < nb_philos)
+	{
+		if (pthread_create(&philo.thread[i], NULL, increment_counter, &philo))
+		{
+			printf("Erreur lors de la creation du thread\n");
+			pthread_mutex_destroy(&philo.mutex);
+			return (1);
+		}
+		i++;
+	}
+	i = 0;
+	while (i < nb_philos)
+	{
+		if (pthread_join(philo.thread[i], NULL))
+		{
+			printf("Erreur lors de l'attente' du thread\n");
+			pthread_mutex_destroy(&philo.mutex);
+			return (2);
+		}
+		i++;
+	}
+	printf("Valeur finale du compteur : %d\n", philo.counter);
+	pthread_mutex_destroy(&philo.mutex);
 	return (0);
 }
