@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42perpignan.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 12:01:15 by pmenard           #+#    #+#             */
-/*   Updated: 2025/02/12 17:41:50 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/02/13 11:51:57 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 typedef struct s_philo
 {
 	int				id;
-	int				forks;
+	int				*forks;
 	pthread_mutex_t	*mutex;
 }	t_philo;
 
