@@ -6,11 +6,33 @@
 /*   By: pmenard <pmenard@student.42perpignan.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 16:30:27 by pmenard           #+#    #+#             */
-/*   Updated: 2025/02/17 14:33:39 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/02/17 15:49:16 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+void	free_philo_and_forks(t_table *table, int i)
+{
+	while (--i >= 0)
+		pthread_mutex_destroy(&table->forks[i]);
+	free(table->philosophers);
+	free(table->forks);
+}
+
+void	free_all(t_table *table)
+{
+	int	i;
+
+	i = 0;
+	while (i < table->nb_philo)
+	{
+		pthread_mutex_destroy(&table->forks[i]);
+		i++;
+	}
+	free(table->philosophers);
+	free(table->forks);
+}
 
 int	ft_atoi(const char *nptr)
 {
@@ -35,26 +57,4 @@ int	ft_atoi(const char *nptr)
 	}
 	result *= sign;
 	return (result);
-}
-
-void	free_philo_and_forks(t_table *table, int i)
-{
-	while (--i >= 0)
-		pthread_mutex_destroy(&table->forks[i]);
-	free(table->philosophers);
-	free(table->forks);
-}
-
-void	free_all(t_table *table)
-{
-	int	i;
-
-	i = 0;
-	while (i < table->nb_philo)
-	{
-		pthread_mutex_destroy(&table->forks[i]);
-		i++;
-	}
-	free(table->philosophers);
-	free(table->forks);
 }

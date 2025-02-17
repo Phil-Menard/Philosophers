@@ -6,51 +6,19 @@
 /*   By: pmenard <pmenard@student.42perpignan.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 16:58:36 by pmenard           #+#    #+#             */
-/*   Updated: 2025/02/17 14:35:32 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/02/17 17:56:30 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-void	init_philosophers(t_table *table)
-{
-	int	i;
-
-	table->philosophers = malloc(table->nb_philo * sizeof(t_philo));
-	table->forks = malloc(table->nb_philo * sizeof(pthread_mutex_t));
-	i = 0;
-	while (i < table->nb_philo)
-	{
-		pthread_mutex_init(&table->forks[i], NULL);
-		i++;
-	}
-	i = 0;
-	while (i < table->nb_philo)
-	{
-		table->philosophers[i].id = i + 1;
-		table->philosophers[i].fork_left = &table->forks[i];
-		if (i == table->nb_philo - 1)
-			table->philosophers[i].fork_right = &table->forks[0];
-		else
-			table->philosophers[i].fork_right = &table->forks[i + 1];
-		i++;
-	}
-}
 
 void	*handle_threads(void *arg)
 {
 	t_philo	*philo;
 
 	philo = (t_philo *) arg;
-	pthread_mutex_lock(philo->fork_left);
-	printf("%d has taken his left fork\n", philo->id);
-	pthread_mutex_lock(philo->fork_right);
-	printf("%d has taken his right fork\n", philo->id);
-	printf("%d is eating\n", philo->id);
-	usleep(500);
-	printf("%d finished eating\n", philo->id);
-	pthread_mutex_unlock(philo->fork_left);
-	pthread_mutex_unlock(philo->fork_right);
+	if (philo->id % 2 == 0 && philo->has_eaten == 0)
+		eat(philo);
 	return (NULL);
 }
 

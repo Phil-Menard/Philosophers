@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42perpignan.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 12:01:15 by pmenard           #+#    #+#             */
-/*   Updated: 2025/02/17 14:33:46 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/02/17 17:55:37 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,10 @@ typedef struct s_philo
 	pthread_t		thread;
 	pthread_mutex_t	*fork_left;
 	pthread_mutex_t	*fork_right;
+	int				has_eaten;
+	int				is_eating;
+	int				is_sleeping;
+	int				is_thinking;
 	int				id;
 }	t_philo;
 
@@ -35,6 +39,8 @@ typedef struct s_table
 }	t_table;
 
 int		ft_atoi(const char *nptr);
+void	init_philosophers(t_table *table);
+void	eat(t_philo *philo);
 void	free_philo_and_forks(t_table *table, int i);
 void	free_all(t_table *table);
 

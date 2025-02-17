@@ -9,7 +9,9 @@ OBJ_DIR = objs
 
 # Fichiers sources
 SRC = philo.c \
-	utils.c
+	utils.c \
+	initialisation.c \
+	instructions.c \
 
 # Ajout des préfixes de dossiers
 SRC := $(addprefix $(SRC_DIR)/, $(SRC))
