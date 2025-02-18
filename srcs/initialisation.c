@@ -6,13 +6,13 @@
 /*   By: pmenard <pmenard@student.42perpignan.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 16:53:51 by pmenard           #+#    #+#             */
-/*   Updated: 2025/02/18 13:15:01 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/02/18 14:31:31 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	init_values(t_philo *philosopher)
+void	init_values(t_philo *philosopher, char **argv)
 {
 	if (philosopher->id % 2 == 0)
 	{
@@ -27,9 +27,16 @@ void	init_values(t_philo *philosopher)
 		philosopher->has_thought = 0;
 	}
 	philosopher->is_dead = 0;
+	philosopher->time_to_die = atoi(argv[2]);
+	philosopher->time_to_eat = atoi(argv[3]);
+	philosopher->time_to_sleep = atoi(argv[4]);
+	if (argv[5])
+		philosopher->nb_time_must_eat = atoi(argv[5]);
+	else
+		philosopher->nb_time_must_eat = -1;
 }
 
-void	init_philosophers(t_table *table)
+void	init_philosophers(t_table *table, char **argv)
 {
 	int	i;
 
@@ -47,7 +54,7 @@ void	init_philosophers(t_table *table)
 			table->philosophers[i].fork_right = &table->forks[0];
 		else
 			table->philosophers[i].fork_right = &table->forks[i + 1];
-		init_values(&table->philosophers[i]);
+		init_values(&table->philosophers[i], argv);
 		table->philosophers[i].one_died = &table->dead;
 	}
 }

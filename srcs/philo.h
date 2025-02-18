@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42perpignan.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 12:01:15 by pmenard           #+#    #+#             */
-/*   Updated: 2025/02/18 13:14:46 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/02/18 14:22:26 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,10 @@ typedef struct s_philo
 	int				is_dead;
 	int				*one_died;
 	int				id;
+	int				time_to_die;
+	int				time_to_eat;
+	int				time_to_sleep;
+	int				nb_time_must_eat;
 }	t_philo;
 
 typedef struct s_table
@@ -47,11 +51,11 @@ typedef struct s_table
 }	t_table;
 
 int		ft_atoi(const char *nptr);
-void	init_philosophers(t_table *table);
+void	init_philosophers(t_table *table, char **argv);
 void	go_eat(t_philo *philo);
 void	go_sleep(t_philo *philo);
 void	go_think(t_philo *philo);
-void	free_philo_and_forks(t_table *table, int i);
+void	free_some(t_table *table, int i);
 void	free_all(t_table *table);
 
 #endif
