@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42perpignan.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 12:01:15 by pmenard           #+#    #+#             */
-/*   Updated: 2025/02/18 14:22:26 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/02/18 16:17:18 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,13 @@ SLEEP
 THINK
 */
 
+typedef struct s_time
+{
+	struct timeval	start_time;
+	struct timeval	end_time;
+	long			ellapsed_ms;
+}	t_time;
+
 typedef struct s_philo
 {
 	pthread_t		thread;
@@ -39,6 +46,7 @@ typedef struct s_philo
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
+	int				time_to_think;
 	int				nb_time_must_eat;
 }	t_philo;
 
@@ -46,6 +54,7 @@ typedef struct s_table
 {
 	pthread_mutex_t	*forks;
 	t_philo			*philosophers;
+	t_time			time_ms;
 	int				nb_philo;
 	int				dead;
 }	t_table;

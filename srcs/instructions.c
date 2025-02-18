@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42perpignan.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 16:52:33 by pmenard           #+#    #+#             */
-/*   Updated: 2025/02/18 14:29:07 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/02/18 14:50:03 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	go_sleep(t_philo *philo)
 void	go_think(t_philo *philo)
 {
 	printf("%d is thinking\n", philo->id);
-	usleep(1000000);
+	usleep(philo->time_to_think);
 	philo->has_slept = 0;
 	philo->has_thought = 1;
 }

@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42perpignan.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 16:53:51 by pmenard           #+#    #+#             */
-/*   Updated: 2025/02/18 14:31:31 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/02/18 14:49:24 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ void	init_values(t_philo *philosopher, char **argv)
 	philosopher->time_to_die = atoi(argv[2]);
 	philosopher->time_to_eat = atoi(argv[3]);
 	philosopher->time_to_sleep = atoi(argv[4]);
+	philosopher->time_to_think = philosopher->time_to_die
+		- philosopher->time_to_eat - philosopher->time_to_sleep;
 	if (argv[5])
 		philosopher->nb_time_must_eat = atoi(argv[5]);
 	else
