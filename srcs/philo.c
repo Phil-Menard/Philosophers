@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42perpignan.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 16:58:36 by pmenard           #+#    #+#             */
-/*   Updated: 2025/02/18 16:18:10 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/02/18 18:38:50 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ int	main(int argc, char **argv)
 		printf(" (optionnal argument)\n");
 		return (1);
 	}
-	if (check_args(argc, argv) == - 1)
+	if (check_args(argc, argv) == -1)
 		return (1);
 	table.nb_philo = ft_atoi(argv[1]);
 	table.dead = 0;
@@ -113,17 +113,30 @@ int	main(int argc, char **argv)
 	if (gettimeofday(&table.time_ms.start_time, NULL) != 0)
 	{
 		printf("Erreur lors de l'appel à gettimeofday");
-		return 1;
+		return (1);
 	}
 	if (start_philosophers(&table) == 1)
 		return (1);
+	free_all(&table);
 	if (gettimeofday(&table.time_ms.end_time, NULL) != 0)
 	{
 		printf("Erreur lors de l'appel à gettimeofday");
-		return 1;
+		return (1);
 	}
-	free_all(&table);
-	table.time_ms.ellapsed_ms = (table.time_ms.end_time.tv_sec - table.time_ms.start_time.tv_sec * 1000)
-		+ (table.time_ms.end_time.tv_usec - table.time_ms.start_time.tv_usec / 1000);
+	table.time_ms.ellapsed_ms = (table.time_ms.end_time.tv_sec - table.time_ms.start_time.tv_sec) * 1000
+		+ (table.time_ms.end_time.tv_usec - table.time_ms.start_time.tv_usec) / 1000;
 	printf("Temps ecoule : %ld ms\n", table.time_ms.ellapsed_ms);
 }
+
+/*
+Test 1 800 200 200. The philosopher should not eat and should die.
+
+Test 5 800 200 200. No philosopher should die.
+
+Test 5 800 200 200 7. No philosopher should die and
+the simulation should stop when every philosopher has eaten at least 7 times.
+
+Test 4 410 200 200. No philosopher should die.
+
+Test 4 310 200 100. One philosopher should die.
+*/
