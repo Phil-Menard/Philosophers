@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42perpignan.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 16:53:51 by pmenard           #+#    #+#             */
-/*   Updated: 2025/02/18 17:48:05 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/02/20 12:27:38 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	init_values(t_philo *philosopher, char **argv)
 		philosopher->nb_time_must_eat = -1;
 }
 
-void	init_philosophers(t_table *table, char **argv)
+int	init_philosophers(t_table *table, char **argv)
 {
 	int	i;
 
@@ -58,5 +58,11 @@ void	init_philosophers(t_table *table, char **argv)
 			table->philosophers[i].fork_right = &table->forks[i + 1];
 		init_values(&table->philosophers[i], argv);
 		table->philosophers[i].one_died = &table->dead;
+		if (gettimeofday(&table->philosophers[i].timer.start_time, NULL) != 0)
+		{
+			printf("Erreur lors de l'appel à gettimeofday");
+			return (1);
+		}
 	}
+	return (0);
 }

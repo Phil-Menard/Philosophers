@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42perpignan.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 16:58:36 by pmenard           #+#    #+#             */
-/*   Updated: 2025/02/18 18:38:50 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/02/20 14:22:02 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,25 +110,22 @@ int	main(int argc, char **argv)
 	table.nb_philo = ft_atoi(argv[1]);
 	table.dead = 0;
 	init_philosophers(&table, argv);
-	if (gettimeofday(&table.time_ms.start_time, NULL) != 0)
-	{
-		printf("Erreur lors de l'appel à gettimeofday");
-		return (1);
-	}
 	if (start_philosophers(&table) == 1)
 		return (1);
 	free_all(&table);
-	if (gettimeofday(&table.time_ms.end_time, NULL) != 0)
-	{
-		printf("Erreur lors de l'appel à gettimeofday");
-		return (1);
-	}
-	table.time_ms.ellapsed_ms = (table.time_ms.end_time.tv_sec - table.time_ms.start_time.tv_sec) * 1000
-		+ (table.time_ms.end_time.tv_usec - table.time_ms.start_time.tv_usec) / 1000;
-	printf("Temps ecoule : %ld ms\n", table.time_ms.ellapsed_ms);
 }
 
 /*
+
+Ensure the code of philo complies with the following requirements and ask for explanations.
+
+Check if there is a mutex per fork and that it's used to check the fork value and/or change it.
+
+Check the outputs are never mixed up.
+
+Check how the death of a philosopher is verified and if there is a mutex to prevent a philosopher
+from dying and starting eating at the same time.
+
 Test 1 800 200 200. The philosopher should not eat and should die.
 
 Test 5 800 200 200. No philosopher should die.
