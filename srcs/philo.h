@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42perpignan.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 12:01:15 by pmenard           #+#    #+#             */
-/*   Updated: 2025/02/20 12:48:30 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/02/20 15:25:40 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,11 @@
 # include <sys/time.h>
 # include <pthread.h>
 
-/*
-EAT
-SLEEP
-THINK
-*/
-
 typedef struct s_time
 {
 	struct timeval	start_time;
 	struct timeval	end_time;
-	long			ellapsed_ms;
+	long			elapsed_ms;
 }	t_time;
 
 typedef struct s_philo
@@ -38,7 +32,7 @@ typedef struct s_philo
 	pthread_mutex_t	*fork_left;
 	pthread_mutex_t	*fork_right;
 	t_time			timer;
-	long			elapsed_time;
+	t_time			starve_timer;
 	int				has_eaten;
 	int				has_slept;
 	int				has_thought;

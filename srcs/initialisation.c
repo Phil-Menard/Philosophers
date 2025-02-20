@@ -6,13 +6,22 @@
 /*   By: pmenard <pmenard@student.42perpignan.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 16:53:51 by pmenard           #+#    #+#             */
-/*   Updated: 2025/02/20 12:27:38 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/02/20 16:05:26 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	init_values(t_philo *philosopher, char **argv)
+int	set_time_to_think(t_philo *philosopher)
+{
+	philosopher->time_to_think = philosopher->time_to_die
+		- philosopher->time_to_eat - philosopher->time_to_sleep;
+	if (philosopher->time_to_think > 10)
+		philosopher->time_to_think = 10;
+	return (philosopher->time_to_think);
+}
+
+int	init_values(t_philo *philosopher, char **argv)
 {
 	if (philosopher->id % 2 == 0)
 	{
@@ -30,12 +39,14 @@ void	init_values(t_philo *philosopher, char **argv)
 	philosopher->time_to_die = atoi(argv[2]);
 	philosopher->time_to_eat = atoi(argv[3]);
 	philosopher->time_to_sleep = atoi(argv[4]);
-	philosopher->time_to_think = philosopher->time_to_die
-		- philosopher->time_to_eat - philosopher->time_to_sleep;
+	philosopher->time_to_think = set_time_to_think(philosopher);
 	if (argv[5])
 		philosopher->nb_time_must_eat = atoi(argv[5]);
 	else
 		philosopher->nb_time_must_eat = -1;
+	if (gettimeofday(&philosopher->starve_timer.start_time, NULL) != 0)
+		return (printf("Erreur lors de l'appel à gettimeofday"), 1);
+	return (0);
 }
 
 int	init_philosophers(t_table *table, char **argv)
