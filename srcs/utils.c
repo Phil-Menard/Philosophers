@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pmenard <pmenard@student.42perpignan.fr    +#+  +:+       +#+        */
+/*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 16:30:27 by pmenard           #+#    #+#             */
-/*   Updated: 2025/02/18 14:15:35 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/04/17 11:11:39 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+//free some philosophers and destroy some mutexes
 void	free_some(t_table *table, int i)
 {
 	while (--i >= 0)
@@ -20,6 +21,7 @@ void	free_some(t_table *table, int i)
 	free(table->forks);
 }
 
+//free all philosophers and destroy all mutexes
 void	free_all(t_table *table)
 {
 	int	i;

@@ -3,24 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   initialisation.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pmenard <pmenard@student.42perpignan.fr    +#+  +:+       +#+        */
+/*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 16:53:51 by pmenard           #+#    #+#             */
-/*   Updated: 2025/02/20 16:05:26 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/04/17 12:51:00 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+//might want to change it
 int	set_time_to_think(t_philo *philosopher)
 {
 	philosopher->time_to_think = philosopher->time_to_die
 		- philosopher->time_to_eat - philosopher->time_to_sleep;
 	if (philosopher->time_to_think > 10)
 		philosopher->time_to_think = 10;
-	return (philosopher->time_to_think);
+	return (200);
 }
 
+//init values for philosophers
 int	init_values(t_philo *philosopher, char **argv)
 {
 	if (philosopher->id % 2 == 0)
@@ -44,8 +46,7 @@ int	init_values(t_philo *philosopher, char **argv)
 		philosopher->nb_time_must_eat = atoi(argv[5]);
 	else
 		philosopher->nb_time_must_eat = -1;
-	if (gettimeofday(&philosopher->starve_timer.start_time, NULL) != 0)
-		return (printf("Erreur lors de l'appel à gettimeofday"), 1);
+	gettimeofday(&philosopher->starve_timer.start_time, NULL);
 	return (0);
 }
 
@@ -62,14 +63,27 @@ int	init_philosophers(t_table *table, char **argv)
 	while (++i < table->nb_philo)
 	{
 		table->philosophers[i].id = i + 1;
-		table->philosophers[i].fork_left = &table->forks[i];
-		if (i == table->nb_philo - 1)
+		if (table->nb_philo == 1)
+		{
+			table->philosophers[i].fork_left = &table->forks[0];
 			table->philosophers[i].fork_right = &table->forks[0];
+		}
 		else
-			table->philosophers[i].fork_right = &table->forks[i + 1];
+		{
+			table->philosophers[i].fork_left = &table->forks[i];
+			if (i == table->nb_philo - 1)
+				table->philosophers[i].fork_right = &table->forks[0];
+			else
+				table->philosophers[i].fork_right = &table->forks[i + 1];
+		}
 		init_values(&table->philosophers[i], argv);
 		table->philosophers[i].one_died = &table->dead;
 		if (gettimeofday(&table->philosophers[i].timer.start_time, NULL) != 0)
+		{
+			printf("Erreur lors de l'appel à gettimeofday");
+			return (1);
+		}
+		else if (gettimeofday(&table->philosophers[i].starve_timer.end_time, NULL) != 0)
 		{
 			printf("Erreur lors de l'appel à gettimeofday");
 			return (1);
