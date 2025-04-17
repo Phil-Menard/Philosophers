@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 16:53:51 by pmenard           #+#    #+#             */
-/*   Updated: 2025/04/17 12:51:00 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/04/17 14:47:09 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,7 @@ int	set_time_to_think(t_philo *philosopher)
 {
 	philosopher->time_to_think = philosopher->time_to_die
 		- philosopher->time_to_eat - philosopher->time_to_sleep;
-	if (philosopher->time_to_think > 10)
-		philosopher->time_to_think = 10;
-	return (200);
+	return (philosopher->time_to_think);
 }
 
 //init values for philosophers
@@ -33,8 +31,8 @@ int	init_values(t_philo *philosopher, char **argv)
 	}
 	else
 	{
-		philosopher->has_eaten = 0;
-		philosopher->has_slept = 1;
+		philosopher->has_eaten = 1;
+		philosopher->has_slept = 0;
 		philosopher->has_thought = 0;
 	}
 	philosopher->is_dead = 0;
@@ -62,6 +60,7 @@ int	init_philosophers(t_table *table, char **argv)
 	i = -1;
 	while (++i < table->nb_philo)
 	{
+		pthread_mutex_init(&table->philosophers[i].death_mutex, NULL);
 		table->philosophers[i].id = i + 1;
 		if (table->nb_philo == 1)
 		{
@@ -77,17 +76,8 @@ int	init_philosophers(t_table *table, char **argv)
 				table->philosophers[i].fork_right = &table->forks[i + 1];
 		}
 		init_values(&table->philosophers[i], argv);
+		gettimeofday(&table->philosophers[i].timer.start_time, NULL);
 		table->philosophers[i].one_died = &table->dead;
-		if (gettimeofday(&table->philosophers[i].timer.start_time, NULL) != 0)
-		{
-			printf("Erreur lors de l'appel à gettimeofday");
-			return (1);
-		}
-		else if (gettimeofday(&table->philosophers[i].starve_timer.end_time, NULL) != 0)
-		{
-			printf("Erreur lors de l'appel à gettimeofday");
-			return (1);
-		}
 	}
 	return (0);
 }

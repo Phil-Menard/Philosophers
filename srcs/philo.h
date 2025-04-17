@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pmenard <pmenard@student.42perpignan.fr    +#+  +:+       +#+        */
+/*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 12:01:15 by pmenard           #+#    #+#             */
-/*   Updated: 2025/02/20 15:25:40 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/04/17 13:31:47 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ typedef struct s_philo
 	pthread_t		thread;
 	pthread_mutex_t	*fork_left;
 	pthread_mutex_t	*fork_right;
+	pthread_mutex_t	death_mutex;
 	t_time			timer;
 	t_time			starve_timer;
 	int				has_eaten;

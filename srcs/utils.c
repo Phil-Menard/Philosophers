@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 16:30:27 by pmenard           #+#    #+#             */
-/*   Updated: 2025/04/17 11:11:39 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/04/17 14:40:02 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,10 @@
 void	free_some(t_table *table, int i)
 {
 	while (--i >= 0)
+	{
 		pthread_mutex_destroy(&table->forks[i]);
+		pthread_mutex_destroy(&table->philosophers[i].death_mutex);
+	}
 	free(table->philosophers);
 	free(table->forks);
 }
@@ -60,3 +63,15 @@ int	ft_atoi(const char *nptr)
 	result *= sign;
 	return (result);
 }
+
+/* long	calcul_elapsed_time(t_philo *philo)
+{
+	long	x;
+
+	x = (philo->timer.end_time.tv_sec
+		- philo->timer.start_time.tv_sec) * 1000
+	+ (philo->timer.end_time.tv_usec - philo->timer.start_time.tv_usec + 500)
+		/ 1000;
+	return (x);
+}
+ */
