@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 12:01:15 by pmenard           #+#    #+#             */
-/*   Updated: 2025/04/21 15:32:56 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/04/21 19:17:16 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,6 @@ typedef struct s_philo
 	pthread_mutex_t	*death_mutex;
 	t_time			timer;
 	t_time			starve_timer;
-	int				has_eaten;
-	int				has_slept;
-	int				has_thought;
-	int				is_dead;
 	int				*one_died;
 	int				id;
 	int				time_to_die;
@@ -59,14 +55,17 @@ typedef struct s_table
 
 int		ft_atoi(const char *nptr);
 int		init_philosophers(t_table *table, char **argv);
-int		go_eat(t_philo *philo);
-int		go_sleep(t_philo *philo);
-int		go_think(t_philo *philo);
+int		one_philo(t_philo *philo);
+void	display_instruction(t_philo *philo, char *str);
+void	take_fork(t_philo *philo);
 int		check_death(t_philo *philo);
-void	free_some(t_table *table, int i);
-void	free_all(t_table *table);
+void	go_eat(t_philo *philo);
+void	go_sleep(t_philo *philo);
+void	go_think(t_philo *philo);
 long	calcul_elapsed_time(t_philo *philo);
 long	calcul_starving_time(t_philo *philo);
-int		one_philo(t_philo *philo);
+int		monitor_instructions(t_philo *philo, int time_to_wait);
+void	free_some(t_table *table, int i);
+void	free_all(t_table *table);
 
 #endif

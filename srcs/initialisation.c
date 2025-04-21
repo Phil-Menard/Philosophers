@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 16:53:51 by pmenard           #+#    #+#             */
-/*   Updated: 2025/04/21 15:33:11 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/04/21 19:17:25 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,6 @@
 //init values for philosophers
 int	init_values(t_philo *philosopher, char **argv)
 {
-	if (philosopher->id % 2 == 0)
-	{
-		philosopher->has_eaten = 0;
-		philosopher->has_slept = 0;
-		philosopher->has_thought = 1;
-	}
-	else
-	{
-		philosopher->has_eaten = 1;
-		philosopher->has_slept = 0;
-		philosopher->has_thought = 0;
-	}
-	philosopher->is_dead = 0;
 	philosopher->time_to_die = atoi(argv[2]);
 	philosopher->time_to_eat = atoi(argv[3]);
 	philosopher->time_to_sleep = atoi(argv[4]);

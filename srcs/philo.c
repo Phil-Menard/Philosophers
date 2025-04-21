@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 16:58:36 by pmenard           #+#    #+#             */
-/*   Updated: 2025/04/21 15:37:24 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/04/21 17:05:38 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,9 @@ void	*handle_threads(void *arg)
 	gettimeofday(&philo->starve_timer.start_time, NULL);
 	while (*philo->one_died == 0)
 	{
-		if (philo->has_thought == 1)
-			go_eat(philo);
-		else if (philo->has_slept == 1)
-			go_think(philo);
-		else if (philo->has_eaten == 1)
-			go_sleep(philo);
+		go_eat(philo);
+		go_sleep(philo);
+		go_think(philo);
 	}
 	return (NULL);
 }
