@@ -12,6 +12,7 @@ SRC = philo.c \
 	utils.c \
 	initialisation.c \
 	instructions.c \
+	free.c \
 
 # Ajout des préfixes de dossiers
 SRC := $(addprefix $(SRC_DIR)/, $(SRC))

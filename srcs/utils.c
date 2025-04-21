@@ -6,38 +6,11 @@
 /*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 16:30:27 by pmenard           #+#    #+#             */
-/*   Updated: 2025/04/17 14:40:02 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/04/21 14:56:35 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-//free some philosophers and destroy some mutexes
-void	free_some(t_table *table, int i)
-{
-	while (--i >= 0)
-	{
-		pthread_mutex_destroy(&table->forks[i]);
-		pthread_mutex_destroy(&table->philosophers[i].death_mutex);
-	}
-	free(table->philosophers);
-	free(table->forks);
-}
-
-//free all philosophers and destroy all mutexes
-void	free_all(t_table *table)
-{
-	int	i;
-
-	i = 0;
-	while (i < table->nb_philo)
-	{
-		pthread_mutex_destroy(&table->forks[i]);
-		i++;
-	}
-	free(table->philosophers);
-	free(table->forks);
-}
 
 int	ft_atoi(const char *nptr)
 {
@@ -64,7 +37,7 @@ int	ft_atoi(const char *nptr)
 	return (result);
 }
 
-/* long	calcul_elapsed_time(t_philo *philo)
+long	calcul_elapsed_time(t_philo *philo)
 {
 	long	x;
 
@@ -74,4 +47,27 @@ int	ft_atoi(const char *nptr)
 		/ 1000;
 	return (x);
 }
- */
+
+long	calcul_starving_time(t_philo *philo)
+{
+	long	x;
+
+	x = (philo->starve_timer.end_time.tv_sec
+		- philo->starve_timer.start_time.tv_sec) * 1000
+	+ (philo->starve_timer.end_time.tv_usec
+		- philo->starve_timer.start_time.tv_usec + 500)
+		/ 1000;
+	return (x);
+}
+
+int	one_philo(t_philo *philo)
+{
+	if (philo->fork_left == philo->fork_right)
+	{
+		while(check_death(philo) == 0)
+			usleep(100);
+		return (1);
+	}
+	else
+		return (0);
+}

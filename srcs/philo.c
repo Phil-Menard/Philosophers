@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 16:58:36 by pmenard           #+#    #+#             */
-/*   Updated: 2025/04/17 11:12:18 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/04/21 15:37:24 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ void	*handle_threads(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *) arg;
+	gettimeofday(&philo->timer.start_time, NULL);
+	gettimeofday(&philo->starve_timer.start_time, NULL);
 	while (*philo->one_died == 0)
 	{
 		if (philo->has_thought == 1)
@@ -137,4 +139,11 @@ the simulation should stop when every philosopher has eaten at least 7 times.
 Test 4 410 200 200. No philosopher should die.
 
 Test 4 310 200 100. One philosopher should die.
+
+
+l'impair prend first la fourchette de droite
+les pairs prennent a gauche
+if impair
+	take fork right
+else
 */
