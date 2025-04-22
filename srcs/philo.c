@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 16:58:36 by pmenard           #+#    #+#             */
-/*   Updated: 2025/04/22 09:03:44 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/04/22 10:08:28 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	*handle_threads(void *arg)
 	philo = (t_philo *) arg;
 	gettimeofday(&philo->timer.start_time, NULL);
 	gettimeofday(&philo->starve_timer.start_time, NULL);
-	while (*philo->one_died == 0)
+	while (*philo->one_died == 0 && *philo->ate_enough < philo->nb_philo)
 	{
 		go_eat(philo);
 		go_sleep(philo);
@@ -107,13 +107,16 @@ int	main(int argc, char **argv)
 
 /*
 
-Ensure the code of philo complies with the following requirements and ask for explanations.
+Ensure the code of philo complies with the following requirements and 
+ask for explanations.
 
-Check if there is a mutex per fork and that it's used to check the fork value and/or change it.
+Check if there is a mutex per fork and that it's used to check the 
+fork value and/or change it.
 
 Check the outputs are never mixed up.
 
-Check how the death of a philosopher is verified and if there is a mutex to prevent a philosopher
+Check how the death of a philosopher is verified and if there is a 
+mutex to prevent a philosopher
 from dying and starting eating at the same time.
 
 Test 1 800 200 200. The philosopher should not eat and should die.

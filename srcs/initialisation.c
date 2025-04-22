@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 16:53:51 by pmenard           #+#    #+#             */
-/*   Updated: 2025/04/21 19:17:25 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/04/22 10:07:17 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,30 @@ int	init_values(t_philo *philosopher, char **argv)
 	return (0);
 }
 
+void	check_nb_philo(t_table *table, int i)
+{
+	if (table->nb_philo == 1)
+	{
+		table->philosophers[i].fork_left = &table->forks[0];
+		table->philosophers[i].fork_right = &table->forks[0];
+	}
+	else
+	{
+		table->philosophers[i].fork_left = &table->forks[i];
+		if (i == table->nb_philo - 1)
+			table->philosophers[i].fork_right = &table->forks[0];
+		else
+			table->philosophers[i].fork_right = &table->forks[i + 1];
+	}
+}
+
 int	init_philosophers(t_table *table, char **argv)
 {
 	int	i;
 
 	table->philosophers = malloc(table->nb_philo * sizeof(t_philo));
 	table->forks = malloc(table->nb_philo * sizeof(pthread_mutex_t));
+	table->enough_meal = 0;
 	i = -1;
 	while (++i < table->nb_philo)
 		pthread_mutex_init(&table->forks[i], NULL);
@@ -41,22 +59,12 @@ int	init_philosophers(t_table *table, char **argv)
 	{
 		table->philosophers[i].id = i + 1;
 		table->philosophers[i].death_mutex = &table->death_mutex;
-		if (table->nb_philo == 1)
-		{
-			table->philosophers[i].fork_left = &table->forks[0];
-			table->philosophers[i].fork_right = &table->forks[0];
-		}
-		else
-		{
-			table->philosophers[i].fork_left = &table->forks[i];
-			if (i == table->nb_philo - 1)
-				table->philosophers[i].fork_right = &table->forks[0];
-			else
-				table->philosophers[i].fork_right = &table->forks[i + 1];
-		}
+		check_nb_philo(table, i);
 		table->philosophers[i].print_mutex = &table->print;
 		init_values(&table->philosophers[i], argv);
 		table->philosophers[i].one_died = &table->dead;
+		table->philosophers[i].ate_enough = &table->enough_meal;
+		table->philosophers[i].nb_philo = table->nb_philo;
 	}
 	return (0);
 }

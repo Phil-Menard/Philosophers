@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 12:01:15 by pmenard           #+#    #+#             */
-/*   Updated: 2025/04/21 19:17:16 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/04/22 09:54:08 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,13 @@ typedef struct s_philo
 	t_time			timer;
 	t_time			starve_timer;
 	int				*one_died;
+	int				*ate_enough;
 	int				id;
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				nb_time_must_eat;
+	int				nb_philo;
 }	t_philo;
 
 typedef struct s_table
@@ -50,6 +52,7 @@ typedef struct s_table
 	pthread_mutex_t	death_mutex;
 	t_philo			*philosophers;
 	int				nb_philo;
+	int				enough_meal;
 	int				dead;
 }	t_table;
 
@@ -65,6 +68,7 @@ void	go_think(t_philo *philo);
 long	calcul_elapsed_time(t_philo *philo);
 long	calcul_starving_time(t_philo *philo);
 int		monitor_instructions(t_philo *philo, int time_to_wait);
+int		count_meals(t_philo *philo);
 void	free_some(t_table *table, int i);
 void	free_all(t_table *table);
 

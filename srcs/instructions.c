@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 16:52:33 by pmenard           #+#    #+#             */
-/*   Updated: 2025/04/22 09:02:58 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/04/22 10:04:25 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,12 @@ int	check_death(t_philo *philo)
 		pthread_mutex_unlock(philo->death_mutex);
 		return (1);
 	}
+	else if (*philo->ate_enough == philo->nb_philo)
+	{
+		pthread_mutex_unlock(philo->print_mutex);
+		pthread_mutex_unlock(philo->death_mutex);
+		return (1);
+	}
 	pthread_mutex_unlock(philo->print_mutex);
 	pthread_mutex_unlock(philo->death_mutex);
 	return (0);
@@ -59,6 +65,7 @@ void	go_eat(t_philo *philo)
 	}
 	pthread_mutex_unlock(philo->fork_left);
 	pthread_mutex_unlock(philo->fork_right);
+	philo->nb_time_must_eat = count_meals(philo);
 	if (check_death(philo) == 1)
 		return ;
 }
