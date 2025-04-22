@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 16:58:36 by pmenard           #+#    #+#             */
-/*   Updated: 2025/04/22 10:08:28 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/04/22 10:16:24 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ int	main(int argc, char **argv)
 		printf(" (optionnal argument)\n");
 		return (1);
 	}
-	if (check_args(argc, argv) == -1)
+	if (check_args(argc, argv) == 1)
 		return (1);
 	table.nb_philo = ft_atoi(argv[1]);
 	table.dead = 0;
@@ -106,7 +106,6 @@ int	main(int argc, char **argv)
 }
 
 /*
-
 Ensure the code of philo complies with the following requirements and 
 ask for explanations.
 
