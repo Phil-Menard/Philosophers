@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 16:30:27 by pmenard           #+#    #+#             */
-/*   Updated: 2025/04/22 09:15:45 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/04/22 15:54:54 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,16 @@ long	calcul_starving_time(t_philo *philo)
 		+ (philo->starve_timer.end_time.tv_usec
 			- philo->starve_timer.start_time.tv_usec) / 1000;
 	return (x);
+}
+
+int	one_philo(t_philo *philo)
+{
+	if (philo->fork_left == philo->fork_right)
+	{
+		while (check_death(philo) == 0)
+			usleep(100);
+		return (1);
+	}
+	else
+		return (0);
 }

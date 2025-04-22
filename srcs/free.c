@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 14:20:48 by pmenard           #+#    #+#             */
-/*   Updated: 2025/04/21 15:13:38 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/04/22 16:08:03 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,9 @@ void	free_some(t_table *table, int i)
 	{
 		pthread_mutex_destroy(&table->forks[i]);
 	}
-	pthread_mutex_destroy(&table->death_mutex);
 	pthread_mutex_destroy(&table->print);
+	pthread_mutex_destroy(&table->death_mutex);
+	pthread_mutex_destroy(&table->meal_mutex);
 	free(table->philosophers);
 	free(table->forks);
 }
@@ -37,6 +38,8 @@ void	free_all(t_table *table)
 		i++;
 	}
 	pthread_mutex_destroy(&table->print);
+	pthread_mutex_destroy(&table->death_mutex);
+	pthread_mutex_destroy(&table->meal_mutex);
 	free(table->philosophers);
 	free(table->forks);
 }

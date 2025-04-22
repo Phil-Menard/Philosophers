@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 16:52:33 by pmenard           #+#    #+#             */
-/*   Updated: 2025/04/22 10:12:01 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/04/22 18:29:43 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,6 @@ int	check_death(t_philo *philo)
 		pthread_mutex_unlock(philo->death_mutex);
 		return (1);
 	}
-	else if (*philo->ate_enough == philo->nb_philo)
-	{
-		pthread_mutex_unlock(philo->print_mutex);
-		pthread_mutex_unlock(philo->death_mutex);
-		return (1);
-	}
 	pthread_mutex_unlock(philo->print_mutex);
 	pthread_mutex_unlock(philo->death_mutex);
 	return (0);
@@ -52,9 +46,8 @@ int	check_death(t_philo *philo)
 
 void	go_eat(t_philo *philo)
 {
-	if (check_death(philo) == 1)
+	if (take_fork(philo) == 1)
 		return ;
-	take_fork(philo);
 	gettimeofday(&philo->starve_timer.start_time, NULL);
 	display_instruction(philo, "is eating");
 	if (monitor_instructions(philo, philo->time_to_eat) == 1)
@@ -65,9 +58,9 @@ void	go_eat(t_philo *philo)
 	}
 	pthread_mutex_unlock(philo->fork_left);
 	pthread_mutex_unlock(philo->fork_right);
+	pthread_mutex_lock(philo->meal_mutex);
 	philo->nb_time_must_eat = count_meals(philo);
-	if (check_death(philo) == 1)
-		return ;
+	pthread_mutex_unlock(philo->meal_mutex);
 }
 
 void	go_sleep(t_philo *philo)
@@ -75,16 +68,12 @@ void	go_sleep(t_philo *philo)
 	display_instruction(philo, "is sleeping");
 	if (monitor_instructions(philo, philo->time_to_sleep) == 1)
 		return ;
-	if (check_death(philo) == 1)
-		return ;
 }
 
 void	go_think(t_philo *philo)
 {
-	if (check_death(philo) == 1)
-		return ;
 	if ((philo->time_to_die - philo->time_to_eat - philo->time_to_sleep)
 		>= 10)
-		usleep(5000);
+		usleep(2000);
 	display_instruction(philo, "is thinking");
 }

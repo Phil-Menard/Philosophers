@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 16:58:36 by pmenard           #+#    #+#             */
-/*   Updated: 2025/04/22 10:16:24 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/04/22 18:20:53 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,17 @@ void	*handle_threads(void *arg)
 	philo = (t_philo *) arg;
 	gettimeofday(&philo->timer.start_time, NULL);
 	gettimeofday(&philo->starve_timer.start_time, NULL);
-	while (*philo->one_died == 0 && *philo->ate_enough < philo->nb_philo)
+	while (1)
 	{
 		go_eat(philo);
+		if (check_meals(philo) == 1 || check_if_one_dead(philo) == 1)
+			break ;
 		go_sleep(philo);
+		if (check_meals(philo) == 1 || check_if_one_dead(philo) == 1)
+			break ;
 		go_think(philo);
+		if (check_meals(philo) == 1 || check_if_one_dead(philo) == 1)
+			break ;
 	}
 	return (NULL);
 }
@@ -73,7 +79,7 @@ int	check_args(int argc, char **argv)
 	i = 1;
 	while (i < argc)
 	{
-		if (atoi(argv[i]) <= 0)
+		if (ft_atoi(argv[i]) <= 0)
 		{
 			printf("%s should be > 0. ", argv[i]);
 			printf("Otherwise it is not possible!\n");
@@ -104,28 +110,3 @@ int	main(int argc, char **argv)
 		return (1);
 	free_all(&table);
 }
-
-/*
-Ensure the code of philo complies with the following requirements and 
-ask for explanations.
-
-Check if there is a mutex per fork and that it's used to check the 
-fork value and/or change it.
-
-Check the outputs are never mixed up.
-
-Check how the death of a philosopher is verified and if there is a 
-mutex to prevent a philosopher
-from dying and starting eating at the same time.
-
-Test 1 800 200 200. The philosopher should not eat and should die.
-
-Test 5 800 200 200. No philosopher should die.
-
-Test 5 800 200 200 7. No philosopher should die and
-the simulation should stop when every philosopher has eaten at least 7 times.
-
-Test 4 410 200 200. No philosopher should die.
-
-Test 4 310 200 100. One philosopher should die.
-*/
