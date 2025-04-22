@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 16:52:33 by pmenard           #+#    #+#             */
-/*   Updated: 2025/04/21 19:21:51 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/04/22 09:02:58 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,8 @@ void	go_eat(t_philo *philo)
 	if (check_death(philo) == 1)
 		return ;
 	take_fork(philo);
-	display_instruction(philo, "is eating");
 	gettimeofday(&philo->starve_timer.start_time, NULL);
+	display_instruction(philo, "is eating");
 	if (monitor_instructions(philo, philo->time_to_eat) == 1)
 	{
 		pthread_mutex_unlock(philo->fork_left);

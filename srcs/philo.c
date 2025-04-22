@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 16:58:36 by pmenard           #+#    #+#             */
-/*   Updated: 2025/04/21 17:05:38 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/04/22 09:03:44 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,22 +36,12 @@ int	end_philosophers(t_table *table)
 	i = -1;
 	while (++i < table->nb_philo)
 	{
-		//table->philosophers[i].is_dead == 0 && 
 		if (pthread_join(table->philosophers[i].thread, NULL))
 		{
 			printf("Erreur lors de l'attente du thread.\n");
 			free_all(table);
 			return (1);
 		}
-		/* else if (table->philosophers[i].is_dead == 1)
-		{
-			printf("%d died\n", table->philosophers[i].id);
-			if (pthread_detach(table->philosophers[i].thread))
-			{
-				printf("Erreur lors du detachement du thread.\n");
-				return (1);
-			}
-		} */
 	}
 	return (0);
 }
@@ -136,11 +126,4 @@ the simulation should stop when every philosopher has eaten at least 7 times.
 Test 4 410 200 200. No philosopher should die.
 
 Test 4 310 200 100. One philosopher should die.
-
-
-l'impair prend first la fourchette de droite
-les pairs prennent a gauche
-if impair
-	take fork right
-else
 */

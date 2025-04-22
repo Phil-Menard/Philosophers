@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 16:30:27 by pmenard           #+#    #+#             */
-/*   Updated: 2025/04/21 19:15:13 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/04/22 09:15:45 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,9 @@ long	calcul_elapsed_time(t_philo *philo)
 	long	x;
 
 	x = (philo->timer.end_time.tv_sec
-		- philo->timer.start_time.tv_sec) * 1000
-	+ (philo->timer.end_time.tv_usec - philo->timer.start_time.tv_usec) / 1000;
+			- philo->timer.start_time.tv_sec) * 1000
+		+ (philo->timer.end_time.tv_usec - philo->timer.start_time.tv_usec)
+		/ 1000;
 	return (x);
 }
 
@@ -52,8 +53,8 @@ long	calcul_starving_time(t_philo *philo)
 	long	x;
 
 	x = (philo->starve_timer.end_time.tv_sec
-		- philo->starve_timer.start_time.tv_sec) * 1000
-	+ (philo->starve_timer.end_time.tv_usec
-		- philo->starve_timer.start_time.tv_usec) / 1000;
+			- philo->starve_timer.start_time.tv_sec) * 1000
+		+ (philo->starve_timer.end_time.tv_usec
+			- philo->starve_timer.start_time.tv_usec) / 1000;
 	return (x);
 }
