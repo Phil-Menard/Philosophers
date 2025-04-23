@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 16:52:33 by pmenard           #+#    #+#             */
-/*   Updated: 2025/04/22 18:29:43 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/04/23 14:18:53 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,8 @@ void	go_sleep(t_philo *philo)
 
 void	go_think(t_philo *philo)
 {
-	if ((philo->time_to_die - philo->time_to_eat - philo->time_to_sleep)
+	/* if ((philo->time_to_die - philo->time_to_eat - philo->time_to_sleep)
 		>= 10)
-		usleep(2000);
+		usleep(1000); */
 	display_instruction(philo, "is thinking");
 }

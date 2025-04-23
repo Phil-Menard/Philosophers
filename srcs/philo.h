@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 12:01:15 by pmenard           #+#    #+#             */
-/*   Updated: 2025/04/22 18:20:46 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/04/23 14:28:24 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ typedef struct s_philo
 	pthread_mutex_t	*print_mutex;
 	pthread_mutex_t	*death_mutex;
 	pthread_mutex_t	*meal_mutex;
-	t_time			timer;
-	t_time			starve_timer;
+	t_time			timer;//pointer vers l'adresse du timer de table
+	t_time			starve_timer;//change en int ou long
 	int				*one_died;
 	int				*ate_enough;
 	int				id;
@@ -48,6 +48,7 @@ typedef struct s_philo
 
 typedef struct s_table
 {
+	//creer timer global ici
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	print;
 	pthread_mutex_t	death_mutex;
