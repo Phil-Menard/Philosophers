@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 16:53:51 by pmenard           #+#    #+#             */
-/*   Updated: 2025/05/06 11:05:00 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/05/06 13:23:41 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,23 @@ void	check_nb_philo(t_table *table, int i)
 	{
 		table->philosophers[i].fork_left = &table->forks[0];
 		table->philosophers[i].fork_right = &table->forks[0];
+		table->philosophers[i].check_fork_left = &table->check_fork[0];
+		table->philosophers[i].check_fork_right = &table->check_fork[0];
 	}
 	else
 	{
 		table->philosophers[i].fork_left = &table->forks[i];
+		table->philosophers[i].check_fork_left = &table->check_fork[i];
 		if (i == table->nb_philo - 1)
+		{
 			table->philosophers[i].fork_right = &table->forks[0];
+			table->philosophers[i].check_fork_right = &table->check_fork[0];
+		}
 		else
+		{
 			table->philosophers[i].fork_right = &table->forks[i + 1];
+			table->philosophers[i].check_fork_right = &table->check_fork[i + 1];
+		}
 	}
 }
 
@@ -48,12 +57,16 @@ void	init_mutexes(t_table *table)
 
 	i = -1;
 	while (++i < table->nb_philo)
+	{
 		pthread_mutex_init(&table->forks[i], NULL);
+		table->check_fork[i] = 0;
+	}
 	pthread_mutex_init(&table->print, NULL);
 	pthread_mutex_init(&table->death_mutex, NULL);
 	pthread_mutex_init(&table->ready_mutex, NULL);
 	pthread_mutex_init(&table->meal_mutex, NULL);
 	pthread_mutex_init(&table->time_mutex, NULL);
+	pthread_mutex_init(&table->check_fork_mutex, NULL);
 }
 
 int	init_philosophers(t_table *table, char **argv)
@@ -62,6 +75,7 @@ int	init_philosophers(t_table *table, char **argv)
 
 	table->philosophers = malloc(table->nb_philo * sizeof(t_philo));
 	table->forks = malloc(table->nb_philo * sizeof(pthread_mutex_t));
+	table->check_fork = malloc(table->nb_philo * sizeof(int));
 	table->enough_meal = 0;
 	table->all_ready = 0;
 	init_mutexes(table);
@@ -81,10 +95,12 @@ int	init_philosophers(t_table *table, char **argv)
 		table->philosophers[i].ready = &table->all_ready;
 		table->philosophers[i].ready_mutex = &table->ready_mutex;
 		table->philosophers[i].time_mutex = &table->time_mutex;
+		table->philosophers[i].check_fork_mutex = &table->check_fork_mutex;
 	}
 	return (0);
 }
 
+//wait for all threads to be created
 void	wait_threads(t_philo *philo)
 {
 	pthread_mutex_lock(philo->ready_mutex);

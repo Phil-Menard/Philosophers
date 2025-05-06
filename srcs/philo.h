@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 12:01:15 by pmenard           #+#    #+#             */
-/*   Updated: 2025/05/06 10:26:49 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/05/06 13:17:04 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,16 @@ typedef struct s_philo
 	pthread_t		thread;
 	pthread_mutex_t	*fork_left;
 	pthread_mutex_t	*fork_right;
+	pthread_mutex_t	*check_fork_mutex;
 	pthread_mutex_t	*print_mutex;
 	pthread_mutex_t	*death_mutex;
 	pthread_mutex_t	*meal_mutex;
 	pthread_mutex_t	*ready_mutex;
 	pthread_mutex_t	*time_mutex;
-	t_time			*timer;//pointer vers l'adresse du timer de table
-	t_time			starve_timer;//change en int ou long
+	t_time			*timer;
+	t_time			starve_timer;
+	int				*check_fork_left;
+	int				*check_fork_right;
 	int				*ready;
 	int				*one_died;
 	int				*ate_enough;
@@ -51,8 +54,8 @@ typedef struct s_philo
 
 typedef struct s_table
 {
-	//creer timer global ici
 	pthread_mutex_t	*forks;
+	pthread_mutex_t	check_fork_mutex;
 	pthread_mutex_t	print;
 	pthread_mutex_t	death_mutex;
 	pthread_mutex_t	meal_mutex;
@@ -60,6 +63,7 @@ typedef struct s_table
 	pthread_mutex_t	time_mutex;
 	t_time			global_timer;
 	t_philo			*philosophers;
+	int				*check_fork;
 	int				nb_philo;
 	int				enough_meal;
 	int				dead;

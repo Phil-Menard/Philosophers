@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 16:52:33 by pmenard           #+#    #+#             */
-/*   Updated: 2025/05/06 11:05:09 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/05/06 13:28:56 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,15 +51,29 @@ int	check_death(t_philo *philo)
 void	go_eat(t_philo *philo)
 {
 	if (take_fork(philo) == 1)
+	{
+		pthread_mutex_lock(philo->check_fork_mutex);
+		*philo->check_fork_left = 0;
+		*philo->check_fork_right = 0;
+		pthread_mutex_unlock(philo->check_fork_mutex);
 		return ;
+	}
 	gettimeofday(&philo->starve_timer.start_time, NULL);
 	display_instruction(philo, "is eating");
 	if (monitor_instructions(philo, philo->time_to_eat) == 1)
 	{
+		pthread_mutex_lock(philo->check_fork_mutex);
+		*philo->check_fork_left = 0;
+		*philo->check_fork_right = 0;
+		pthread_mutex_unlock(philo->check_fork_mutex);
 		pthread_mutex_unlock(philo->fork_left);
 		pthread_mutex_unlock(philo->fork_right);
 		return ;
 	}
+	pthread_mutex_lock(philo->check_fork_mutex);
+	*philo->check_fork_left = 0;
+	*philo->check_fork_right = 0;
+	pthread_mutex_unlock(philo->check_fork_mutex);
 	pthread_mutex_unlock(philo->fork_left);
 	pthread_mutex_unlock(philo->fork_right);
 	pthread_mutex_lock(philo->meal_mutex);
