@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pmenard <pmenard@student.42perpignan.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 16:30:27 by pmenard           #+#    #+#             */
-/*   Updated: 2025/05/06 15:50:29 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/05/06 18:09:33 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,36 +37,25 @@ int	ft_atoi(const char *nptr)
 	return (result);
 }
 
-long	calcul_elapsed_time(t_table *table)
+long	get_current_time(void)
 {
+	struct timeval	timer;
 	long	x;
 
-	x = (table->global_timer.end_time.tv_sec
-			- table->global_timer.start_time.tv_sec) * 1000
-		+ (table->global_timer.end_time.tv_usec
-			- table->global_timer.start_time.tv_usec) / 1000;
+	gettimeofday(&timer, NULL);
+	x = (timer.tv_sec * 1000) + (timer.tv_usec / 1000);
 	return (x);
 }
 
-long	calcul_starving_time(t_philo *philo)
+void	omg_one_died(t_philo *philo)
 {
-	long	x;
+	long	timer;
 
-	x = (philo->meal_timer.end_time.tv_sec
-			- philo->meal_timer.start_time.tv_sec) * 1000
-		+ (philo->meal_timer.end_time.tv_usec
-			- philo->meal_timer.start_time.tv_usec) / 1000;
-	return (x);
-}
-
-int	one_philo(t_philo *philo)
-{
-	if (philo->fork_left == philo->fork_right)
-	{
-		while (check_death(philo) == 0)
-			usleep(100);
-		return (1);
-	}
-	else
-		return (0);
+	timer = get_current_time() - philo->start_timer;
+	pthread_mutex_lock(philo->print_mutex);
+	pthread_mutex_lock(philo->death_mutex);
+	*philo->dead = 1;
+	printf("%ld %d died\n", timer, philo->id);
+	pthread_mutex_unlock(philo->print_mutex);
+	pthread_mutex_unlock(philo->death_mutex);
 }

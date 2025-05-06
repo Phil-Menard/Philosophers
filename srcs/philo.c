@@ -3,31 +3,42 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pmenard <pmenard@student.42perpignan.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 16:58:36 by pmenard           #+#    #+#             */
-/*   Updated: 2025/05/06 15:47:39 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/05/06 18:15:36 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-//main loop that keep philosophers living and doing things
-void	*handle_threads(void *arg)
+int	check_philos(t_table *table)
 {
-	t_philo	*philo;
+	int		i;
+	int		temp_nb_meal;
+	long	temp_last_meal;
+	int		total_meal;
 
-	philo = (t_philo *) arg;
-	wait_threads(philo);
-	while (1)
+	i = 0;
+	while (i < table->nb_philo)
 	{
-		if (take_fork(philo) == 1)
-			return ;
-		go_eat(philo);
-		go_sleep(philo);
-		go_think(philo);
+		pthread_mutex_lock(table->philosophers[i].meal_mutex);
+		temp_nb_meal = table->philosophers[i].nb_meal;
+		temp_last_meal = table->philosophers[i].last_meal;
+		pthread_mutex_unlock(table->philosophers[i].meal_mutex);
+		if (table->required_meal != -1 && temp_nb_meal >= table->required_meal)
+			total_meal++;
+		if (total_meal == table->nb_philo)
+			return (1);
+		if ((get_current_time() - temp_last_meal)
+			> table->philosophers[i].time_to_die)
+		{
+			omg_one_died(&table->philosophers[i]);
+			return (1);
+		}
+		i++;
 	}
-	return (NULL);
+	return (0);
 }
 
 int	end_philosophers(t_table *table)
@@ -62,9 +73,6 @@ int	start_philosophers(t_table *table)
 			return (1);
 		}
 	}
-	i = -1;
-	while (++i < table->nb_philo)
-		gettimeofday(&table->philosophers[i].meal_timer.start_time, NULL);
 	return (0);
 }
 
@@ -102,9 +110,10 @@ int	main(int argc, char **argv)
 	table.nb_philo = ft_atoi(argv[1]);
 	table.dead = 0;
 	init_philosophers(&table, argv);
+	gettimeofday(&table.global_timer.start_time, NULL);
+	set_timer_start(&table);
 	if (start_philosophers(&table) == 1)
 		return (1);
-	gettimeofday(&table.global_timer.start_time, NULL);
 	while (1)
 	{
 		if (check_philos(&table) != 0)
