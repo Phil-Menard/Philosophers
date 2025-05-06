@@ -6,13 +6,13 @@
 /*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 18:35:10 by pmenard           #+#    #+#             */
-/*   Updated: 2025/04/23 14:18:35 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/05/06 11:05:40 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	check_if_one_dead(t_philo *philo)
+int	check_if_one_died(t_philo *philo)
 {
 	pthread_mutex_lock(philo->death_mutex);
 	if (*philo->one_died == 1)
@@ -96,18 +96,4 @@ int	monitor_instructions(t_philo *philo, int time_to_wait)
 			+ (time.end_time.tv_usec - time.start_time.tv_usec) / 1000;
 	}
 	return (0);
-}
-
-int	count_meals(t_philo *philo)
-{
-	if (philo->nb_time_must_eat == -1)
-		return (-1);
-	if (philo->nb_time_must_eat > 0)
-		philo->nb_time_must_eat--;
-	if (philo->nb_time_must_eat == 0)
-	{
-		*philo->ate_enough += 1;
-		philo->nb_time_must_eat--;
-	}
-	return (philo->nb_time_must_eat);
 }

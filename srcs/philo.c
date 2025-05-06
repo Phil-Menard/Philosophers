@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 16:58:36 by pmenard           #+#    #+#             */
-/*   Updated: 2025/04/22 18:20:53 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/05/06 10:54:32 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,18 +18,21 @@ void	*handle_threads(void *arg)
 	t_philo	*philo;
 
 	philo = (t_philo *) arg;
-	gettimeofday(&philo->timer.start_time, NULL);
+	wait_threads(philo);
+	pthread_mutex_lock(philo->time_mutex);
+	gettimeofday(&philo->timer->start_time, NULL);
+	pthread_mutex_unlock(philo->time_mutex);
 	gettimeofday(&philo->starve_timer.start_time, NULL);
 	while (1)
 	{
 		go_eat(philo);
-		if (check_meals(philo) == 1 || check_if_one_dead(philo) == 1)
+		if (check_meals(philo) == 1 || check_if_one_died(philo) == 1)
 			break ;
 		go_sleep(philo);
-		if (check_meals(philo) == 1 || check_if_one_dead(philo) == 1)
+		if (check_meals(philo) == 1 || check_if_one_died(philo) == 1)
 			break ;
 		go_think(philo);
-		if (check_meals(philo) == 1 || check_if_one_dead(philo) == 1)
+		if (check_meals(philo) == 1 || check_if_one_died(philo) == 1)
 			break ;
 	}
 	return (NULL);

@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 16:52:33 by pmenard           #+#    #+#             */
-/*   Updated: 2025/04/23 14:18:53 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/05/06 11:05:09 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,12 @@
 void	display_instruction(t_philo *philo, char *str)
 {
 	pthread_mutex_lock(philo->print_mutex);
-	gettimeofday(&philo->timer.end_time, NULL);
-	philo->timer.elapsed_ms = calcul_elapsed_time(philo);
+	pthread_mutex_lock(philo->time_mutex);
+	gettimeofday(&philo->timer->end_time, NULL);
+	philo->timer->elapsed_ms = calcul_elapsed_time(philo);
+	pthread_mutex_unlock(philo->time_mutex);
 	if (*philo->one_died == 0)
-		printf("%ld %d %s\n", philo->timer.elapsed_ms, philo->id, str);
+		printf("%ld %d %s\n", philo->timer->elapsed_ms, philo->id, str);
 	pthread_mutex_unlock(philo->print_mutex);
 }
 
@@ -31,9 +33,11 @@ int	check_death(t_philo *philo)
 	if (*philo->one_died == 0
 		&& philo->starve_timer.elapsed_ms >= philo->time_to_die)
 	{
-		gettimeofday(&philo->timer.end_time, NULL);
-		philo->timer.elapsed_ms = calcul_elapsed_time(philo);
-		printf("%ld %d died\n", philo->timer.elapsed_ms, philo->id);
+		pthread_mutex_lock(philo->time_mutex);
+		gettimeofday(&philo->timer->end_time, NULL);
+		philo->timer->elapsed_ms = calcul_elapsed_time(philo);
+		printf("%ld %d died\n", philo->timer->elapsed_ms, philo->id);
+		pthread_mutex_unlock(philo->time_mutex);
 		*philo->one_died = 1;
 		pthread_mutex_unlock(philo->print_mutex);
 		pthread_mutex_unlock(philo->death_mutex);
@@ -72,8 +76,5 @@ void	go_sleep(t_philo *philo)
 
 void	go_think(t_philo *philo)
 {
-	/* if ((philo->time_to_die - philo->time_to_eat - philo->time_to_sleep)
-		>= 10)
-		usleep(1000); */
 	display_instruction(philo, "is thinking");
 }
