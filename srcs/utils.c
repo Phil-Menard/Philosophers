@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 16:30:27 by pmenard           #+#    #+#             */
-/*   Updated: 2025/05/06 11:05:45 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/05/06 15:50:29 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,14 @@ int	ft_atoi(const char *nptr)
 	return (result);
 }
 
-long	calcul_elapsed_time(t_philo *philo)
+long	calcul_elapsed_time(t_table *table)
 {
 	long	x;
 
-	x = (philo->timer->end_time.tv_sec
-			- philo->timer->start_time.tv_sec) * 1000
-		+ (philo->timer->end_time.tv_usec - philo->timer->start_time.tv_usec)
-		/ 1000;
+	x = (table->global_timer.end_time.tv_sec
+			- table->global_timer.start_time.tv_sec) * 1000
+		+ (table->global_timer.end_time.tv_usec
+			- table->global_timer.start_time.tv_usec) / 1000;
 	return (x);
 }
 
@@ -52,10 +52,10 @@ long	calcul_starving_time(t_philo *philo)
 {
 	long	x;
 
-	x = (philo->starve_timer.end_time.tv_sec
-			- philo->starve_timer.start_time.tv_sec) * 1000
-		+ (philo->starve_timer.end_time.tv_usec
-			- philo->starve_timer.start_time.tv_usec) / 1000;
+	x = (philo->meal_timer.end_time.tv_sec
+			- philo->meal_timer.start_time.tv_sec) * 1000
+		+ (philo->meal_timer.end_time.tv_usec
+			- philo->meal_timer.start_time.tv_usec) / 1000;
 	return (x);
 }
 
@@ -69,18 +69,4 @@ int	one_philo(t_philo *philo)
 	}
 	else
 		return (0);
-}
-
-int	count_meals(t_philo *philo)
-{
-	if (philo->nb_time_must_eat == -1)
-		return (-1);
-	if (philo->nb_time_must_eat > 0)
-		philo->nb_time_must_eat--;
-	if (philo->nb_time_must_eat == 0)
-	{
-		*philo->ate_enough += 1;
-		philo->nb_time_must_eat--;
-	}
-	return (philo->nb_time_must_eat);
 }

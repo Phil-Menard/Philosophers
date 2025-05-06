@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 16:58:36 by pmenard           #+#    #+#             */
-/*   Updated: 2025/05/06 10:54:32 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/05/06 15:47:39 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,21 +19,13 @@ void	*handle_threads(void *arg)
 
 	philo = (t_philo *) arg;
 	wait_threads(philo);
-	pthread_mutex_lock(philo->time_mutex);
-	gettimeofday(&philo->timer->start_time, NULL);
-	pthread_mutex_unlock(philo->time_mutex);
-	gettimeofday(&philo->starve_timer.start_time, NULL);
 	while (1)
 	{
+		if (take_fork(philo) == 1)
+			return ;
 		go_eat(philo);
-		if (check_meals(philo) == 1 || check_if_one_died(philo) == 1)
-			break ;
 		go_sleep(philo);
-		if (check_meals(philo) == 1 || check_if_one_died(philo) == 1)
-			break ;
 		go_think(philo);
-		if (check_meals(philo) == 1 || check_if_one_died(philo) == 1)
-			break ;
 	}
 	return (NULL);
 }
@@ -70,8 +62,9 @@ int	start_philosophers(t_table *table)
 			return (1);
 		}
 	}
-	if (end_philosophers(table) == -1)
-		return (1);
+	i = -1;
+	while (++i < table->nb_philo)
+		gettimeofday(&table->philosophers[i].meal_timer.start_time, NULL);
 	return (0);
 }
 
@@ -79,6 +72,13 @@ int	check_args(int argc, char **argv)
 {
 	int	i;
 
+	if (argc < 5 || argc > 6)
+	{
+		printf("Should be ./philo number_of_philosophers time_to_die ");
+		printf("time_to_eat time_to_sleep [number_of_times_each_");
+		printf("philosopher_must_eat] (optionnal argument)\n");
+		return (1);
+	}
 	i = 1;
 	while (i < argc)
 	{
@@ -96,14 +96,7 @@ int	check_args(int argc, char **argv)
 int	main(int argc, char **argv)
 {
 	t_table	table;
-
-	if (argc < 5 || argc > 6)
-	{
-		printf("Should be ./philo number_of_philosophers time_to_die time_to_");
-		printf("eat time_to_sleep [number_of_times_each_philosopher_must_eat]");
-		printf(" (optionnal argument)\n");
-		return (1);
-	}
+	
 	if (check_args(argc, argv) == 1)
 		return (1);
 	table.nb_philo = ft_atoi(argv[1]);
@@ -111,5 +104,12 @@ int	main(int argc, char **argv)
 	init_philosophers(&table, argv);
 	if (start_philosophers(&table) == 1)
 		return (1);
+	gettimeofday(&table.global_timer.start_time, NULL);
+	while (1)
+	{
+		if (check_philos(&table) != 0)
+			break ;
+	}
+	end_philosophers(&table);
 	free_all(&table);
 }
