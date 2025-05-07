@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pmenard <pmenard@student.42perpignan.fr    +#+  +:+       +#+        */
+/*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 16:58:36 by pmenard           #+#    #+#             */
-/*   Updated: 2025/05/06 18:15:36 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/05/07 10:57:00 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ int	check_philos(t_table *table)
 	int		total_meal;
 
 	i = 0;
+	total_meal = 0;
 	while (i < table->nb_philo)
 	{
 		pthread_mutex_lock(table->philosophers[i].meal_mutex);
@@ -29,14 +30,12 @@ int	check_philos(t_table *table)
 		if (table->required_meal != -1 && temp_nb_meal >= table->required_meal)
 			total_meal++;
 		if (total_meal == table->nb_philo)
-			return (1);
+			return (enough_meals(table), 1);
 		if ((get_current_time() - temp_last_meal)
 			> table->philosophers[i].time_to_die)
-		{
-			omg_one_died(&table->philosophers[i]);
-			return (1);
-		}
+			return (omg_one_died(&table->philosophers[i]), 1);
 		i++;
+		usleep(200);
 	}
 	return (0);
 }
@@ -122,3 +121,15 @@ int	main(int argc, char **argv)
 	end_philosophers(&table);
 	free_all(&table);
 }
+
+/*
+
+    Test 1 800 200 200. The philosopher should not eat and should die.
+    Test 5 800 200 200. No philosopher should die.
+    Test 5 800 200 200 7. No philosopher should die
+    Test 4 410 200 200. No philosopher should die.
+    Test 4 310 200 100. One philosopher should die.
+    Test with 2 philosophers and check the different times: a death delayed by more than 10 ms is unacceptable.
+    Test with any values of your choice to verify all the requirements. Ensure philosophers die at the right time, that they don't steal forks, and so forth.
+
+*/

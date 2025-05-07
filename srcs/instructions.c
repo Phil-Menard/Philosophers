@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   instructions.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pmenard <pmenard@student.42perpignan.fr    +#+  +:+       +#+        */
+/*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 16:52:33 by pmenard           #+#    #+#             */
-/*   Updated: 2025/05/06 18:58:01 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/05/07 10:53:50 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,11 @@ void	go_eat(t_philo *philo)
 	display_instruction(philo, "is eating");
 	pthread_mutex_lock(philo->meal_mutex);
 	philo->last_meal = get_current_time();
-	philo->nb_meal++;
 	pthread_mutex_unlock(philo->meal_mutex);
 	monitor_instructions(philo->time_to_eat);
+	pthread_mutex_lock(philo->meal_mutex);
+	philo->nb_meal++;
+	pthread_mutex_unlock(philo->meal_mutex);
 	pthread_mutex_unlock(philo->fork_left);
 	pthread_mutex_unlock(philo->fork_right);
 }

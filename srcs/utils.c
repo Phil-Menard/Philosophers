@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pmenard <pmenard@student.42perpignan.fr    +#+  +:+       +#+        */
+/*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 16:30:27 by pmenard           #+#    #+#             */
-/*   Updated: 2025/05/06 18:09:33 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/05/07 10:52:38 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,4 +58,11 @@ void	omg_one_died(t_philo *philo)
 	printf("%ld %d died\n", timer, philo->id);
 	pthread_mutex_unlock(philo->print_mutex);
 	pthread_mutex_unlock(philo->death_mutex);
+}
+
+void	enough_meals(t_table *table)
+{
+	pthread_mutex_lock(&table->death_mutex);
+	table->dead = 1;
+	pthread_mutex_unlock(&table->death_mutex);
 }

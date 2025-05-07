@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pmenard <pmenard@student.42perpignan.fr    +#+  +:+       +#+        */
+/*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 12:01:15 by pmenard           #+#    #+#             */
-/*   Updated: 2025/05/06 18:13:06 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/05/07 10:51:49 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ void	monitor_instructions(int time_to_wait);
 int		take_fork(t_philo *philo);
 int		check_if_dead(t_philo *philo);
 void	omg_one_died(t_philo *philo);
+void	enough_meals(t_table *table);
 long	get_current_time(void);
 void	free_all(t_table *table);
 

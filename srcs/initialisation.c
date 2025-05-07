@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   initialisation.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pmenard <pmenard@student.42perpignan.fr    +#+  +:+       +#+        */
+/*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 16:53:51 by pmenard           #+#    #+#             */
-/*   Updated: 2025/05/06 18:16:12 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/05/07 10:37:01 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ int	init_values(t_philo *philosopher, char **argv)
 	philosopher->time_to_eat = ft_atoi(argv[3]);
 	philosopher->time_to_sleep = ft_atoi(argv[4]);
 	philosopher->last_meal = get_current_time();
+	philosopher->nb_meal = 0;
 	return (0);
 }
 
