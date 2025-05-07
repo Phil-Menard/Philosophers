@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 16:58:36 by pmenard           #+#    #+#             */
-/*   Updated: 2025/05/07 12:07:53 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/05/07 13:24:34 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,12 +121,3 @@ int	main(int argc, char **argv)
 	end_philosophers(&table);
 	free_all(&table);
 }
-
-/*
-
-    Test 1 800 200 200. The philosopher should not eat and should die.
-    Test 5 800 200 200. No philosopher should die.
-    Test 5 800 200 200 7. No philosopher should die
-    Test 4 410 200 200. No philosopher should die.
-    Test 4 310 200 100. One philosopher should die.
-*/
