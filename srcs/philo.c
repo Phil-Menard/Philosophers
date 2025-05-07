@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/12 16:58:36 by pmenard           #+#    #+#             */
-/*   Updated: 2025/05/07 10:57:00 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/05/07 12:07:53 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	check_philos(t_table *table)
 			> table->philosophers[i].time_to_die)
 			return (omg_one_died(&table->philosophers[i]), 1);
 		i++;
-		usleep(200);
+		usleep(100);
 	}
 	return (0);
 }
@@ -103,7 +103,7 @@ int	check_args(int argc, char **argv)
 int	main(int argc, char **argv)
 {
 	t_table	table;
-	
+
 	if (check_args(argc, argv) == 1)
 		return (1);
 	table.nb_philo = ft_atoi(argv[1]);
@@ -129,7 +129,4 @@ int	main(int argc, char **argv)
     Test 5 800 200 200 7. No philosopher should die
     Test 4 410 200 200. No philosopher should die.
     Test 4 310 200 100. One philosopher should die.
-    Test with 2 philosophers and check the different times: a death delayed by more than 10 ms is unacceptable.
-    Test with any values of your choice to verify all the requirements. Ensure philosophers die at the right time, that they don't steal forks, and so forth.
-
 */

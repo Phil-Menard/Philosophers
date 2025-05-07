@@ -6,7 +6,7 @@
 /*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/17 16:52:33 by pmenard           #+#    #+#             */
-/*   Updated: 2025/05/07 10:53:50 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/05/07 12:09:03 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@ void	display_instruction(t_philo *philo, char *str)
 {
 	long	timer;
 
-	timer = get_current_time() - philo->start_timer;
 	pthread_mutex_lock(philo->print_mutex);
 	pthread_mutex_lock(philo->death_mutex);
+	timer = get_current_time() - philo->start_timer;
 	if (*philo->dead == 0)
 		printf("%ld %d %s\n", timer, philo->id, str);
 	pthread_mutex_unlock(philo->death_mutex);

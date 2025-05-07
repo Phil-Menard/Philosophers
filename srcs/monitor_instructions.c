@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   monitor_instructions.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pmenard <pmenard@student.42perpignan.fr    +#+  +:+       +#+        */
+/*   By: pmenard <pmenard@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 18:35:10 by pmenard           #+#    #+#             */
-/*   Updated: 2025/05/06 18:55:19 by pmenard          ###   ########.fr       */
+/*   Updated: 2025/05/07 12:09:14 by pmenard          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	monitor_instructions(int time_to_wait)
 
 	x = get_current_time() + (long) time_to_wait;
 	while (get_current_time() < x)
-		usleep(500);
+		usleep(50);
 }
 
 int	take_fork(t_philo *philo)
